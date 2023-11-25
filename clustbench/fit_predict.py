@@ -60,7 +60,49 @@ def fit_predict_many(model, data, n_clusters):
     results = dict()
     for k in n_clusters:
         k = int(k)
-        model.set_params(n_clusters=k)
+        model.reset(new_k=k)
         results[k] = model.fit_predict(data) + 1
+
+    return results
+
+
+def fit_predict_many_(model, data, temperatures):
+    """
+    Determine many clusterings of the same dataset.
+
+    Ideally, for hierarchical methods, it would be best
+    if ``model`` was implemented smartly enough
+    that for the same ``X`` and different ``n_clusters``
+    it does not recompute the whole hierarchy from scratch.
+
+
+    Parameters
+    ----------
+
+    model
+        An object equipped with ``fit_predict``
+        and ``set_param`` methods (e.g., a `scikit-learn`-like class)
+
+    data : array-like
+        Data matrix.
+
+    n_clusters : int or list of ints
+        Number of clusters.
+
+
+    Returns
+    -------
+
+    results
+        A dictionary of label vectors,
+        where ``results[K]`` gives the discovered ``K``-partition.
+    """
+    temperatures = np.unique(np.r_[temperatures])
+
+    results = dict()
+    for t in temperatures:
+        model.reset(new_temp=t)
+        res = model.fit_predict(data) + 1
+        results[res.max()] = res
 
     return results
