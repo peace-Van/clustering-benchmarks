@@ -30,5 +30,5 @@ from .load_results import load_results, save_results
 from .load_results import transpose_results, labels_list_to_dict
 from .preprocess_data import preprocess_data
 from .colouriser import Colouriser
-from .fit_predict import fit_predict_many
+from .fit_predict import fit_predict_many, fit_predict_many_
 from .score import get_score
